@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yuchao Shen | Portfolio</title>
+  <style>
+    body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial; margin: 0; background:#0b0f17; color:#e6e6e6;}
+    .wrap { max-width: 920px; margin: 0 auto; padding: 64px 20px;}
+    .card { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 22px; margin: 14px 0;}
+    a { color:#7dd3fc; text-decoration:none;}
+    .muted { color:#a1a1aa;}
+    .tag { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(125,211,252,0.12); border:1px solid rgba(125,211,252,0.25); margin-right:8px; margin-top:8px; font-size: 13px;}
+    h1 { font-size: 36px; margin: 0 0 8px;}
+    h2 { margin: 0 0 10px; font-size: 18px;}
+    .row { display:flex; gap:12px; flex-wrap:wrap;}
+    .btn { display:inline-block; padding:10px 14px; border-radius: 12px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); }
+    .btn:hover { background:rgba(255,255,255,0.12); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Yuchao Shen</h1>
+    <div class="muted">Purdue FYE · Software / Data / ECE方向 · 作品集</div>
+
+    <div style="margin-top:16px" class="row">
+      <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
+      <a class="btn" href="#" target="_blank">LinkedIn</a>
+      <a class="btn" href="mailto:your@email.com">Email</a>
+      <a class="btn" href="#" target="_blank">Resume (PDF)</a>
+    </div>
+
+    <div class="card">
+      <h2>About</h2>
+      <div class="muted">
+        我在 Purdue FYE，关注数据工程/后端与硬件加速方向。这里展示我的项目、技术栈和联系信息。
+      </div>
+      <div>
+        <span class="tag">Python</span>
+        <span class="tag">Spark / PySpark</span>
+        <span class="tag">Vue3 + Element Plus</span>
+        <span class="tag">Java / Spring Boot</span>
+        <span class="tag">C / Systems</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Projects</h2>
+      <ul>
+        <li><b>Data Diff & DQ Pipeline</b> — Hive/ClickHouse/Mongo 数据校验与补数，上报事件（Buffalo）。 <a href="#">Repo</a></li>
+        <li><b>Editable Form Builder</b> — Vue3 + Element Plus 可编辑表单与“反显”能力。 <a href="#">Demo</a></li>
+        <li><b>Smart Study Pod</b> — Purdue 校园学习舱系统方案与设计文档。 <a href="#">Slides</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Contact</h2>
+      <div class="muted">欢迎联系我：<a href="mailto:your@email.com">your@email.com</a></div>
+    </div>
+
+    <div class="muted" style="margin-top:18px">© <span id="y"></span> Yuchao Shen</div>
+  </div>
+  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
