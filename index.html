@@ -21,7 +21,7 @@
     * { box-sizing: border-box; }
     body { font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
     a { color: var(--accent); text-decoration: none; }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 64px 20px 80px; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 64px 20px 80px; transition: filter 0.2s ease; }
     header { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
     .identity { display:flex; align-items:center; gap:14px; flex-wrap:nowrap; }
     .avatar { width:84px; height:84px; border-radius:50%; border:1px solid var(--card-stroke); object-fit:cover; box-shadow: 0 8px 28px rgba(0,0,0,0.35); background: rgba(255,255,255,0.04); }
@@ -33,7 +33,7 @@
     .tab:hover { background: rgba(255,255,255,0.08); }
     .tab.active { background: var(--accent-soft); border-color: var(--accent-stroke); color: var(--accent); }
     .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 12px; background:#fff; border:1px solid rgba(255,255,255,0.25); color:#0b0f17; transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 12px; background:#fff; border:1px solid rgba(255,255,255,0.25); color:#0b0f17; transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; cursor:pointer; font: inherit; }
     .btn:hover { background:#f3f4f6; box-shadow: 0 10px 30px rgba(0,0,0,0.22); transform: translateY(-1px); }
     .btn .icon {
       width:16px;
@@ -57,6 +57,43 @@
     .note-link:last-child { border-bottom:none; }
     .note-link:hover { color: var(--accent); }
     footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
+    .blurred { filter: blur(6px); }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+    .modal {
+      background: #0f1725;
+      border: 1px solid var(--card-stroke);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      border-radius: 18px;
+      max-width: 420px;
+      width: 100%;
+      padding: 22px;
+      color: var(--text);
+    }
+    .modal h3 { margin: 0 0 8px; }
+    .modal .muted { margin-bottom: 14px; display: block; }
+    .modal-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .copy-btn {
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--card-stroke);
+      background: #111827;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      font: inherit;
+    }
+    .copy-btn:hover { background: #1f2937; border-color: var(--accent-stroke); transform: translateY(-1px); }
+    .copy-success { color: var(--accent); font-size: 14px; }
     @media (max-width: 640px) {
       h1 { font-size: 30px; }
       header { flex-direction: column; align-items: flex-start; }
@@ -68,7 +105,7 @@
   </style>
 </head>
 <body>
-  <div id="app" class="wrap">
+  <div id="app" class="wrap" :class="{'blurred': showEmailModal}">
     <header>
       <div class="identity">
         <img class="avatar" src="./assets/avatar.jpg" alt="Yuchao Shen portrait" />
@@ -84,7 +121,7 @@
               <img class="icon" src="./assets/linkedin-mark.svg" alt="LinkedIn" />
               LinkedIn
             </a>
-            <a class="btn" href="mailto:auspr7ng@gmail.com">
+            <a class="btn" href="mailto:auspr7ng@gmail.com" @click.prevent="openEmailModal">
               <img class="icon" src="./assets/email-mark.svg" alt="Email" />
               Email
             </a>
@@ -192,6 +229,19 @@
     </section>
 
     <footer>© <span id="year"></span> Yuchao Shen · Built with Vue</footer>
+
+    <div v-if="showEmailModal" class="overlay" @click.self="closeEmailModal">
+      <div class="modal">
+        <h3>Contact Email</h3>
+        <span class="muted">Need to reach me? Copy the email below.</span>
+        <div class="modal-row">
+          <code style="background: rgba(255,255,255,0.06); padding:8px 10px; border-radius:10px; border:1px solid var(--card-stroke);">{{ email }}</code>
+          <button class="copy-btn" @click="copyEmail">Copy</button>
+        </div>
+        <div style="margin-top:12px;" class="copy-success" v-if="copyState==='copied'">Copied!</div>
+        <div style="margin-top:12px; color: var(--muted);" v-else-if="copyState==='error'">Copy failed, please try manually.</div>
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -202,6 +252,9 @@
       data() {
         return {
           view: 'home',
+          showEmailModal: false,
+          email: 'auspr7ng@gmail.com',
+          copyState: null,
           skills: [
             'Python', 'Spark / PySpark', 'AI Coding + MCP',
             'Java / Spring Boot', 'C / Systems', 'ClickHouse / Hive'
@@ -254,6 +307,22 @@
           } catch (err) {
             console.error('Notes load error', err);
             this.notes = [];
+          }
+        },
+        openEmailModal() {
+          this.copyState = null;
+          this.showEmailModal = true;
+        },
+        closeEmailModal() {
+          this.showEmailModal = false;
+        },
+        async copyEmail() {
+          try {
+            await navigator.clipboard.writeText(this.email);
+            this.copyState = 'copied';
+          } catch (err) {
+            console.error('Copy failed', err);
+            this.copyState = 'error';
           }
         }
       }
