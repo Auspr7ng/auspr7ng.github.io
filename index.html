@@ -1,65 +1,263 @@
 <!doctype html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yuchao Shen | Portfolio</title>
+  <link rel="icon" type="image/jpeg" href="./assets/avatar.jpg" />
+  <link rel="apple-touch-icon" href="./assets/avatar.jpg" />
   <style>
-    body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial; margin: 0; background:#0b0f17; color:#e6e6e6;}
-    .wrap { max-width: 920px; margin: 0 auto; padding: 64px 20px;}
-    .card { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 22px; margin: 14px 0;}
-    a { color:#7dd3fc; text-decoration:none;}
-    .muted { color:#a1a1aa;}
-    .tag { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(125,211,252,0.12); border:1px solid rgba(125,211,252,0.25); margin-right:8px; margin-top:8px; font-size: 13px;}
-    h1 { font-size: 36px; margin: 0 0 8px;}
-    h2 { margin: 0 0 10px; font-size: 18px;}
-    .row { display:flex; gap:12px; flex-wrap:wrap;}
-    .btn { display:inline-block; padding:10px 14px; border-radius: 12px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); }
-    .btn:hover { background:rgba(255,255,255,0.12); }
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f17;
+      --card: rgba(255,255,255,0.06);
+      --card-stroke: rgba(255,255,255,0.12);
+      --text: #e6e6e6;
+      --muted: #a1a1aa;
+      --accent: #7dd3fc;
+      --accent-soft: rgba(125,211,252,0.12);
+      --accent-stroke: rgba(125,211,252,0.25);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+    a { color: var(--accent); text-decoration: none; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 64px 20px 80px; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
+    .identity { display:flex; align-items:center; gap:14px; flex-wrap:nowrap; }
+    .avatar { width:84px; height:84px; border-radius:50%; border:1px solid var(--card-stroke); object-fit:cover; box-shadow: 0 8px 28px rgba(0,0,0,0.35); background: rgba(255,255,255,0.04); }
+    .brand { display:flex; flex-direction:column; gap:6px; }
+    h1 { font-size: 36px; margin: 0; letter-spacing: -0.02em; }
+    .muted { color: var(--muted); }
+    nav { display:flex; gap:10px; flex-wrap:wrap; }
+    .tab { padding:10px 14px; border-radius:12px; background: rgba(255,255,255,0.04); border:1px solid var(--card-stroke); color: var(--text); cursor:pointer; transition: all 0.2s ease; }
+    .tab:hover { background: rgba(255,255,255,0.08); }
+    .tab.active { background: var(--accent-soft); border-color: var(--accent-stroke); color: var(--accent); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 12px; background:#fff; border:1px solid rgba(255,255,255,0.25); color:#0b0f17; transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+    .btn:hover { background:#f3f4f6; box-shadow: 0 10px 30px rgba(0,0,0,0.22); transform: translateY(-1px); }
+    .btn .icon {
+      width:16px;
+      height:16px;
+      object-fit:contain;
+      background:#fff;
+      border-radius:6px;
+      padding:2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .card { background: var(--card); border:1px solid var(--card-stroke); border-radius: 18px; padding: 22px; margin: 16px 0; box-shadow: 0 18px 60px rgba(0,0,0,0.25); }
+    h2 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.01em; }
+    .tag { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--accent-soft); border:1px solid var(--accent-stroke); margin-right:8px; margin-top:8px; font-size: 13px; color: var(--accent); }
+    ul { padding-left: 20px; margin: 0; }
+    li { line-height: 1.6; margin-bottom: 10px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; }
+    .pill { font-size: 13px; padding:6px 9px; border-radius:10px; background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color: var(--muted); }
+    .section-header { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    .note { line-height: 1.5; }
+    .note-link { display:block; padding:10px 0; color: inherit; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .note-link:last-child { border-bottom:none; }
+    .note-link:hover { color: var(--accent); }
+    footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 640px) {
+      h1 { font-size: 30px; }
+      header { flex-direction: column; align-items: flex-start; }
+      .identity { width: 100%; gap:12px; }
+      .avatar { width:74px; height:74px; }
+      nav { width: 100%; }
+      .tab { flex:1; text-align:center; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Yuchao Shen</h1>
-    <div class="muted">Purdue FYE · Software / Data / ECE方向 · 作品集</div>
-
-    <div style="margin-top:16px" class="row">
-      <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
-      <a class="btn" href="#" target="_blank">LinkedIn</a>
-      <a class="btn" href="mailto:your@email.com">Email</a>
-      <a class="btn" href="#" target="_blank">Resume (PDF)</a>
-    </div>
-
-    <div class="card">
-      <h2>About</h2>
-      <div class="muted">
-        我在 Purdue FYE，关注数据工程/后端与硬件加速方向。这里展示我的项目、技术栈和联系信息。
+  <div id="app" class="wrap">
+    <header>
+      <div class="identity">
+        <img class="avatar" src="./assets/avatar.jpg" alt="Yuchao Shen portrait" />
+        <div class="brand">
+          <h1>Yuchao Shen</h1>
+          <div class="muted">Purdue ECE · Software / Data / ECE / AI</div>
+          <div class="row" style="margin-top:6px;">
+            <a class="btn" href="https://github.com/Auspr7ng" target="_blank">
+              <img class="icon" src="./assets/github-mark.svg" alt="GitHub" />
+              GitHub
+            </a>
+            <a class="btn" href="https://www.linkedin.com/in/yuchao-shen-5ba597280/" target="_blank">
+              <img class="icon" src="./assets/linkedin-mark.svg" alt="LinkedIn" />
+              LinkedIn
+            </a>
+            <a class="btn" href="mailto:auspr7ng@gmail.com">
+              <img class="icon" src="./assets/email-mark.svg" alt="Email" />
+              Email
+            </a>
+            <a class="btn" href="./assets/resume.pdf" target="_blank">Resume</a>
+          </div>
+        </div>
       </div>
-      <div>
-        <span class="tag">Python</span>
-        <span class="tag">Spark / PySpark</span>
-        <span class="tag">Vue3 + Element Plus</span>
-        <span class="tag">Java / Spring Boot</span>
-        <span class="tag">C / Systems</span>
+      <nav>
+        <div class="tab" :class="{active: view==='home'}" @click="view='home'">Home</div>
+        <div class="tab" :class="{active: view==='projects'}" @click="view='projects'">Projects</div>
+        <div class="tab" :class="{active: view==='notes'}" @click="view='notes'">Notes</div>
+        <div class="tab" :class="{active: view==='pubs'}" @click="view='pubs'">Publications</div>
+      </nav>
+    </header>
+
+    <section v-if="view==='home'">
+      <div class="card">
+        <h2>About</h2>
+        <div class="muted" style="margin-bottom:12px;">I am in Purdue FYE, focused on data engineering/backend and hardware acceleration. Here you can find my projects, stack, and contact info.</div>
+        <div>
+          <span class="tag" v-for="skill in skills" :key="skill">{{ skill }}</span>
+        </div>
       </div>
-    </div>
+      <div class="card">
+        <div class="section-header">
+          <h2>Experience</h2>
+          <span class="pill">Experience</span>
+        </div>
+        <div v-for="xp in experiences" :key="xp.role" style="margin-bottom:14px;">
+          <div class="section-header" style="margin-bottom:6px;">
+            <div>
+              <strong>{{ xp.role }}</strong>
+              <div class="muted">{{ xp.company }} — {{ xp.location }}</div>
+            </div>
+            <div class="pill">{{ xp.range }}</div>
+          </div>
+          <ul style="margin-top:6px;">
+            <li v-for="item in xp.points" :key="item">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Projects</h2>
-      <ul>
-        <li><b>Data Diff & DQ Pipeline</b> — Hive/ClickHouse/Mongo 数据校验与补数，上报事件（Buffalo）。 <a href="#">Repo</a></li>
-        <li><b>Editable Form Builder</b> — Vue3 + Element Plus 可编辑表单与“反显”能力。 <a href="#">Demo</a></li>
-        <li><b>Smart Study Pod</b> — Purdue 校园学习舱系统方案与设计文档。 <a href="#">Slides</a></li>
-      </ul>
-    </div>
+    <section v-if="view==='projects'">
+      <div class="card">
+        <div class="section-header">
+          <h2>Projects</h2>
+          <span class="pill">Featured</span>
+        </div>
+        <div class="grid">
+          <div class="card" v-for="proj in projects" :key="proj.title" style="margin:0;">
+            <div class="section-header" style="margin-bottom:6px;">
+              <strong>{{ proj.title }}</strong>
+              <div class="pill">{{ proj.year }}</div>
+            </div>
+            <div class="muted" style="margin-bottom:10px;">{{ proj.desc }}</div>
+            <div>
+              <span class="tag" v-for="tag in proj.tags" :key="tag">{{ tag }}</span>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <a class="btn" v-if="proj.repo" :href="proj.repo" target="_blank">
+                <img class="icon" src="./assets/github-mark.svg" alt="GitHub" />
+                Repo
+              </a>
+              <a class="btn" v-if="proj.demo" :href="proj.demo" target="_blank">Demo</a>
+              <a class="btn" v-if="proj.doc" :href="proj.doc" target="_blank">Doc</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Contact</h2>
-      <div class="muted">欢迎联系我：<a href="mailto:your@email.com">your@email.com</a></div>
-    </div>
+    <section v-if="view==='notes'">
+      <div class="card">
+        <div class="section-header">
+          <h2>Notes</h2>
+          <span class="pill">Ongoing</span>
+        </div>
+        <div>
+          <a class="note-link" v-for="note in notes" :key="note.title" :href="note.href">
+            <div><b>{{ note.title }}</b> — {{ note.desc }}</div>
+          </a>
+        </div>
+      </div>
+    </section>
 
-    <div class="muted" style="margin-top:18px">© <span id="y"></span> Yuchao Shen</div>
+    <section v-if="view==='pubs'">
+      <div class="card">
+        <div class="section-header">
+          <h2>Publications</h2>
+          <span class="pill">Draft / Published</span>
+        </div>
+        <ul>
+          <li v-for="pub in pubs" :key="pub.title" class="note">
+            <div><b>{{ pub.title }}</b></div>
+            <div class="muted">{{ pub.venue }} · {{ pub.year }}</div>
+            <div class="muted" style="margin-top:6px;">
+              <a v-if="pub.link" :href="pub.link" target="_blank">PDF</a>
+              <span v-if="pub.link && pub.code"> · </span>
+              <a v-if="pub.code" :href="pub.code" target="_blank">Code</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> Yuchao Shen · Built with Vue</footer>
   </div>
-  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          view: 'home',
+          skills: [
+            'Python', 'Spark / PySpark', 'AI Coding + MCP',
+            'Java / Spring Boot', 'C / Systems', 'ClickHouse / Hive'
+          ],
+          experiences: [
+            {
+              range: 'May 2025 - Aug 2025',
+              role: 'Software Engineer Intern',
+              company: 'JD.com',
+              location: 'Beijing, China',
+              points: [
+                'Developed and maintained scalable RESTful APIs using Java and Spring Boot for internal platform services, supporting millions of daily transactions and enhancing system modularity.',
+                'Designed and implemented real-time and batch data pipelines (Apache Flink and Spark), contributing to performance optimization in large-scale distributed systems.',
+                'Built data consistency validation scripts using PySpark to verify the integrity of data transferred from Hive to ClickHouse (over 1B records); automated results reporting to the event monitoring center.',
+                'Participated in production deployment and debugging, working closely with senior engineers to improve system throughput and reduce failure rates.',
+                'Uploaded and managed pipeline jobs within JD’s scheduling platform, integrating with existing data workflows for continuous delivery and monitoring.'
+              ]
+            }
+          ],
+          projects: [
+            {
+              title: 'Personal Website & Portfolio',
+              year: '2025',
+              desc: '== This website == Built with Vue3, featuring a responsive design, project showcases, and dynamic content rendering.',
+              tags: ['Vue3', 'JavaScript', 'HTML/CSS'],
+              repo: 'https://github.com/Auspr7ng/auspr7ng.github.io'
+            },
+            {
+              title: 'Data Distribution and Validation System',
+              year: '2025',
+              desc: 'JD internship project: PySpark + SeaTunnel pipelines migrating 1B+ records from Hive to ClickHouse with validation, scheduling, and alerting.',
+              tags: ['PySpark', 'SeaTunnel', 'ClickHouse', 'Spring Boot', 'Data Engineering'],
+              doc: '#'
+            }
+          ],
+          notes: [],
+          pubs: []
+        };
+      },
+      async mounted() {
+        document.getElementById('year').textContent = new Date().getFullYear();
+        await this.loadNotes();
+      },
+      methods: {
+        async loadNotes() {
+          try {
+            const res = await fetch('./notes/notes.json');
+            if (!res.ok) throw new Error('Failed to load notes.json');
+            this.notes = await res.json();
+          } catch (err) {
+            console.error('Notes load error', err);
+            this.notes = [];
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
