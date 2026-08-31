@@ -1,7 +1,0 @@
-[
-	{
-		"title": "Spark / PySpark Data Validation Notes",
-		"desc": "MD5-based cross-system validation with strict normalization for Hive→ClickHouse/Mongo pipelines.",
-		"href": "./notes/spark_pyspark_data_validation_standards.html"
-	}
-]

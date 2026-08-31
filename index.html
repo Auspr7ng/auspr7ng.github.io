@@ -53,9 +53,8 @@
     .pill { font-size: 13px; padding:6px 9px; border-radius:10px; background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color: var(--muted); }
     .section-header { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .note { line-height: 1.5; }
-    .note-link { display:block; padding:10px 0; color: inherit; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.08); }
-    .note-link:last-child { border-bottom:none; }
-    .note-link:hover { color: var(--accent); }
+    .project-gallery { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin:14px 0 2px; }
+    .project-gallery img { width:100%; aspect-ratio:4 / 3; object-fit:cover; border-radius:12px; border:1px solid var(--card-stroke); background:rgba(255,255,255,0.04); }
     footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
     .blurred { filter: blur(6px); }
     .overlay {
@@ -101,6 +100,7 @@
       .avatar { width:74px; height:74px; }
       nav { width: 100%; }
       .tab { flex:1; text-align:center; }
+      .project-gallery { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -132,7 +132,6 @@
       <nav>
         <div class="tab" :class="{active: view==='home'}" @click="view='home'">Home</div>
         <div class="tab" :class="{active: view==='projects'}" @click="view='projects'">Projects</div>
-        <div class="tab" :class="{active: view==='notes'}" @click="view='notes'">Notes</div>
         <div class="tab" :class="{active: view==='pubs'}" @click="view='pubs'">Publications</div>
       </nav>
     </header>
@@ -144,6 +143,15 @@
         <div>
           <span class="tag" v-for="skill in skills" :key="skill">{{ skill }}</span>
         </div>
+      </div>
+      <div class="card">
+        <div class="section-header">
+          <h2>Education</h2>
+          <span class="pill">Jan 2025 – Jun 2028</span>
+        </div>
+        <strong>Purdue University</strong>
+        <div class="muted">Computer Engineering · GPA: 3.84 / 4.00</div>
+        <div class="muted" style="margin-top:8px;">Coursework: Data Structures, C Programming, Introduction to Digital System Design, Python Programming</div>
       </div>
       <div class="card">
         <div class="section-header">
@@ -178,6 +186,9 @@
               <div class="pill">{{ proj.year }}</div>
             </div>
             <div class="muted" style="margin-bottom:10px;">{{ proj.desc }}</div>
+            <div class="project-gallery" v-if="proj.images && proj.images.length">
+              <img v-for="image in proj.images" :key="image.src" :src="image.src" :alt="image.alt" />
+            </div>
             <div>
               <span class="tag" v-for="tag in proj.tags" :key="tag">{{ tag }}</span>
             </div>
@@ -190,20 +201,6 @@
               <a class="btn" v-if="proj.doc" :href="proj.doc" target="_blank">Doc</a>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section v-if="view==='notes'">
-      <div class="card">
-        <div class="section-header">
-          <h2>Notes</h2>
-          <span class="pill">Ongoing</span>
-        </div>
-        <div>
-          <a class="note-link" v-for="note in notes" :key="note.title" :href="note.href">
-            <div><b>{{ note.title }}</b> — {{ note.desc }}</div>
-          </a>
         </div>
       </div>
     </section>
@@ -276,6 +273,16 @@
           ],
           projects: [
             {
+              title: 'OpenDuck Mini Biped Robot',
+              year: '2026',
+              desc: 'Built and integrated a 3D-printed biped robot platform, assembling its servo-driven joints, onboard electronics, camera, and custom enclosure for embodied-AI and locomotion experiments.',
+              tags: ['Robotics', 'Embedded Systems', '3D Printing', 'Computer Vision'],
+              images: [
+                { src: './assets/openduck-build-side.jpg', alt: 'OpenDuck Mini biped robot during hardware integration' },
+                { src: './assets/openduck-build-front.jpg', alt: 'OpenDuck Mini biped robot with camera enclosure' }
+              ]
+            },
+            {
               title: 'Personal Website & Portfolio',
               year: '2025',
               desc: '== This website == Built with Vue3, featuring a responsive design, project showcases, and dynamic content rendering.',
@@ -287,27 +294,21 @@
               year: '2025',
               desc: 'JD internship project: PySpark + SeaTunnel pipelines migrating 1B+ records from Hive to ClickHouse with validation, scheduling, and alerting.',
               tags: ['PySpark', 'SeaTunnel', 'ClickHouse', 'Spring Boot', 'Data Engineering'],
+            },
+            {
+              title: 'AI-Enhanced Data Validation Assistant',
+              year: '2025',
+              desc: 'Developed an assistant for DataHub that uses a locally deployed DeepSeek-V3 model and dynamic prompts to explain failures in large-scale data push workflows and streamline incident investigation.',
+              tags: ['DeepSeek-V3', 'LLM', 'Prompt Engineering', 'DataHub']
             }
           ],
-          notes: [],
           pubs: []
         };
       },
-      async mounted() {
+      mounted() {
         document.getElementById('year').textContent = new Date().getFullYear();
-        await this.loadNotes();
       },
       methods: {
-        async loadNotes() {
-          try {
-            const res = await fetch('./notes/notes.json');
-            if (!res.ok) throw new Error('Failed to load notes.json');
-            this.notes = await res.json();
-          } catch (err) {
-            console.error('Notes load error', err);
-            this.notes = [];
-          }
-        },
         openEmailModal() {
           this.copyState = null;
           this.showEmailModal = true;
